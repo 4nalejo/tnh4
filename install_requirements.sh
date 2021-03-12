@@ -64,6 +64,7 @@ echo -e '\e[1;31m
  _/ // _ \(_-</ __/ _ `/ / /
 /___/_//_/___/\__/\_,_/_/_/
 	\e[2mREQUIREMENTS\e[0m'
+mkdir .null
 while :;
 do
 echo -en "\e[2msystem:\e[0m "

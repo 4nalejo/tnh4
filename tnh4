@@ -34,7 +34,6 @@ then
 echo -en
 else
 mkdir login
-mkdir null
 fi
 }
 
