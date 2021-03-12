@@ -1,0 +1,25 @@
+#!/bin/bash
+msg(){
+echo # space
+echo -e "\e[0m\e[1;34mForrat is used by my device find\e[0m"
+echo -e "\e[0m\e[2mI don't know if it's a hacking method"
+echo -e "but I could understand that if we use social engineering we could format a person"
+echo -e "as he says, magic is very simple"
+echo -e "we just have to be the victim give our data and uala, from victim to hacker\e[0m"
+echo # space
+echo -en "\e[1;34menter to take us to the page \e[0m"
+read
+}
+
+echo -en "\e[1;34mwhat device is it on (pc / android):\e[2m "
+read o
+
+if [[ $o == "android" ]]
+then
+msg
+termux-open https://www.google.com/android/find
+elif [[ $o == "pc" ]]
+then
+msg
+python -m webbrowser -n "https://www.google.com/android/find"
+fi

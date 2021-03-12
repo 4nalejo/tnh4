@@ -1,0 +1,294 @@
+#!/bin/bash
+trap ctrl_c INT
+ctrl_c(){
+echo # space
+echo -en "\e[0m\e[35mdo you want to leave yes or no\e[2m "
+read yn
+if [[ $yn == "yes" ]]
+then
+loading "\e[0m\e[1;35mexiting tnh4, thanks for using our services :)\e[0m"
+echo # space
+exit
+elif [[ $yn == "no" ]]
+then
+echo -en "\e[0m\e[35myou are inside a tool yes or no\e[2m "
+read ny
+if [[ $ny == "yes" ]]
+then
+cd ../..
+login
+elif [[ $ny == "no" ]]
+then
+login
+else
+ctrl_c
+fi
+else 
+ctrl_c
+fi
+}
+
+cheek_login(){
+if [ -x login ]
+then
+echo -en
+else
+mkdir login
+mkdir null
+fi
+}
+
+cheking_submodules(){
+if [ -x login ]
+then
+mv login .login
+mv null .null
+mv tools .tools
+else
+echo -en
+fi
+}
+
+cheking_argv(){
+if [[ $1 == "remove_account" ]]
+then
+if [ -x .login/*.log ]
+then
+loading "\e[0m\e[2mRemoving account\e[0m"
+rm .login/*.log > /dev/null 2>&1
+rm .login/.domcuments@* -rfd > /dev/null 2>&1
+exit
+else
+login
+fi
+elif [[ $1 == "update" ]]
+then
+loading "\e[0m\e[2mInstall Updates\e[0m"
+rm tnh4
+curl -s https://raw.githubusercontent.com/4nalejo/tnh4/main/tnh4 -o tnh4
+chmod 755 tnh4
+bash tnh4
+else
+login
+fi
+}
+
+banner(){
+clear
+echo -e "\e[0m\e[1;35m\t  ::::::::::: ::::    ::: :::    :::     ::: 
+\t     :+:     :+:+:   :+: :+:    :+:    :+:   
+\t    +:+     :+:+:+  +:+ +:+    +:+   +:+ +:+ 
+\t   +#+     +#+ +:+ +#+ +#++:++#++  +#+  +:+  
+\t  +#+     +#+  +#+#+# +#+    +#+ +#+#+#+#+#+ 
+\t #+#     #+#   #+#+# #+#    #+#       #+#    
+\t###     ###    #### ###    ###       ###   \e[0m"
+echo -e "\e[1;34m---{hacking from argentina hacking is from the neighborhood}---\e[0m"
+echo # space
+}
+loading(){
+spin[0]="\e[1;35m-"
+spin[1]="\\"
+spin[2]="|"
+spin[3]="/"
+spin[4]="-"
+spin[5]="\\"
+spin[6]="|"
+spin[7]="/"
+spin[8]="-"
+spin[9]="\\"
+spin[10]="|"
+spin[11]="/"
+spin[12]="-"
+spin[13]="\\"
+spin[14]="|"
+spin[15]="/"
+spin[16]="-"
+spin[17]="\\"
+spin[18]="|"
+spin[19]="/"
+spin[20]="\e[1;34mloaded\e[0m"
+echo -en "$1 ${spin[0]}"
+for i in "${spin[@]}"
+do
+echo -ne "\b$i"
+sleep 0.1
+done
+}
+
+login(){
+if [ -x .login/*.log ]
+then
+clear
+user=$(cat .login/login.log | grep "username" | awk '{print $3}')
+pasw=$(cat .login/login.log | grep "password" | awk '{print $3}')
+echo -e "\e[0m\e[1;34m\e[2mlog in with the account you have created in tnh4\e[0m"
+echo -en "\e[0musername \e[2m"
+read u
+echo -en "\e[0mpassword "
+read -s p
+echo #
+loading "logging in"
+echo # space
+if [[ $u == $user ]]
+then
+if [[ $p == $pasw ]]
+then
+banner
+cmd
+else
+echo -e "\e[31mPassword is incorrect\e[0m"
+exit
+fi
+else
+echo -e "\e[31mThe user name is incorrect\e[0m"
+exit
+fi
+else
+echo -e "\e[1;34mcreate account for tnh4\e[0m"
+echo -en "\e[0musername \e[2m"
+read u
+echo -en "\e[0mpassword "
+read -s p
+echo # 
+loading "creating account"
+echo -e "LOGIN
+username : $u
+password : $p" > .login/login.log | chmod 755 .login/login.log
+mkdir .login/.domcuments@$u
+fi
+}
+
+cmd(){
+while :;
+do
+echo -en "\e[0m\e[1;34m{${co}tnh4\e[0m\e[1;34m}\e[0m--\e[1;34m>\e[2m "
+read command_input_output
+c=$(echo "$command_input_output" | awk '{print $1}')
+i=$(echo "$command_input_output" | awk '{print $2}')
+o=$(echo "$command_input_output" | awk '{print $3}')
+e=$(echo "$command_input_output" | awk '{print $4}')
+f=$(echo "$command_input_output" | awk '{print $5}')
+t=$(echo "$command_input_output" | awk '{print $6}')
+
+if [[ $c == "help" ]];
+then
+co="\e[1;34m"
+echo # space
+echo -e "\e[0m\e[1;34mCOMMAND\e[0m \t \e[1;34mDESCRIPTION\e[0m"
+echo # space
+echo -e "\e[1;34mwspcod\e[0m	all about hacking in the WhatsApp environment"
+echo -e "\e[1;34minstig\e[0m	see basic information of an instagram user"
+echo -e "\e[1;34mgenip\e[0m	ip generator with country query"
+echo -e "\e[1;34mcraker\e[0m	hack androids using adb vulnerability"
+echo -e "\e[1;34mspamer\e[0m	unique gmail spammer with a secret and good function"
+echo -e "\e[1;34mforatt\e[0m	being a victim you are already a hacker"
+echo # space
+elif [[ $c == "wspcod" ]];
+then
+echo -en "\e[0m"
+cd .tools/wspcod > /dev/null 2>&1; bash wspcod
+cd ../
+cmd
+elif [[ $c == "instig" ]];
+then
+echo -en "\e[0m"
+cd .tools/instig > /dev/null 2>&1; bash insta
+cd ../
+cmd
+elif [[ $c == "genip" ]];
+then
+co="\e[1;34m"
+echo -en "\e[0m"
+cd .tools/genip > /dev/null 2>&1; bash genip 
+cd ../
+cmd
+elif [[ $c == "craker" ]];
+then
+co="\e[1;34m"
+echo -en "\e[0m"
+cd .tools/craker > /dev/null 2>&1; bash craker $i $o $e $f $t
+cd ../..
+cmd
+elif [[ $c == "spamer" ]];
+then
+co="\e[1;34m"
+echo -en "\e[0m"
+cd .tools/spamer > /dev/null 2>&1; bash spamer
+cd ../..
+cmd
+elif [[ $c == "foratt" ]];
+then
+co="\e[1;34m"
+echo -en "\e[0m"
+cd .tools/foratt > /dev/null 2>&1; bash foratt
+cd ../..
+cmd
+elif [[ $c == "cms" ]]
+then
+echo # space
+echo -e "\t\e[0m\e[1;35m\e[2mnew\e[0m --> create new directories or files"
+echo -e "\t\e[0m\e[1;35m\e[2mdir\e[0m --> list directories or files"
+echo -e "\t\e[0m\e[1;35m\e[2mview\e[0m --> view file content"
+echo -e "\t\e[0m\e[1;35m\e[2mdump\e[0m --> add content to a file"
+echo -e "\t\e[0m\e[1;35m\e[2mremove\e[0m --> delete directories or files (don't just use remove, all saved files and directories will be deleted!)"
+echo -e "\t\e[0m\e[1;35m\e[2mbanner\e[0m --> show banner"
+echo -e "\t\e[0m\e[1;35m\e[2mclear\e[0m --> clean screen"
+echo -e "\t\e[0m\e[1;35m\e[2mexit\e[0m --> exit the program"
+echo # space
+elif [[ $c == "dir" ]];
+then
+co="\e[1;34m"
+echo -en "\e[0m"
+fish -c "ls .login/.domcuments@$user"
+elif [[ $c == "remove" ]];
+then
+co="\e[1;34m"
+rm -rfd .login/.domcuments@$user/$i
+cmd
+elif [[ $c == "view" ]];
+then
+co="\e[1;34m"
+echo -e "\e[0m\t\e[1;34m----------{\e[2m$i\e[0m\e[1;34m}----------\e[0m"
+cat .login/.domcuments@$user/$i -n
+cmd
+elif [[ $c == "new" ]];
+then
+if [[ $i == "mk" ]];
+then
+mkdir .login/.domcuments@$user/$o
+elif [[ $i == "to" ]];
+then
+touch .login/.domcuments@$user/$o
+else
+echo -e "\e[0m\e[1;35mnew \e[2m[file_creation_type_command] [name]\e[0m"
+fi
+elif [[ $c == "dump" ]];
+then
+co="\e[1;34m"
+echo -e "$i" >> .login/.domcuments@$user/$o
+elif [[ $c == "banner" ]];
+then
+co="\e[1;34m"
+banner
+cmd
+elif [[ $c == "clear" ]];
+then
+co="\e[1;34m"
+clear
+cmd
+elif [[ $c == "exit" ]];
+then
+co="\e[1;34m"
+loading "\e[0m\e[1;35mexiting tnh4, thanks for using our services :)\e[0m"
+echo # space
+exit
+else
+co="\e[31m"
+fi
+done
+}
+
+cheek_login
+cheking_submodules
+cheking_argv $@
+login

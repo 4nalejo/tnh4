@@ -1,0 +1,62 @@
+#!/bin/bash
+#animated
+trap ctrl_c INT
+ctrl_c(){
+exit
+}
+banner(){
+echo -e "\033[1;35m   ______"
+echo '  / ____ \   '
+echo ' / / ___` | '
+echo -e "| | (___| | \033[7m\033[4mInstagram\033[0m"
+echo -e "\033[34m \ \____,_|\033[0m "
+echo -e "\033[1;34m  \______/\033[0m"
+echo
+}
+loading(){
+spin[0]="\e[1;35m-"
+spin[1]="\\"
+spin[2]="|"
+spin[3]="/"
+spin[4]="-"
+spin[5]="\\"
+spin[6]="|"
+spin[7]="/"
+spin[8]="-"
+spin[9]="\\"
+spin[10]="|"
+spin[11]="/"
+spin[12]="-"
+spin[13]="\\"
+spin[14]="|"
+spin[15]="/"
+spin[16]="-"
+spin[17]="\\"
+spin[18]="|"
+spin[19]="/"
+spin[20]="\e[1;34m+\e[0m"
+echo -en "$1 ${spin[0]}"
+for i in "${spin[@]}"
+do
+echo -ne "\b$i"
+sleep 0.1
+done
+}
+banner
+#Instagram analyzer
+echo -n "username: "
+read user
+loading "looking for user name information"
+echo # space
+wget https://www.instagram.com/$user/ > /dev/null 2>&1
+followers=$(grep "<meta content" index.html | tr '"=' " " | awk '{print $3}')
+following=$(grep "<meta content" index.html | tr '"=' " " | awk '{print $5}')
+post=$(grep "<meta content" index.html | tr '"=' " " | awk '{print $7}')
+username=$(grep "<meta content" index.html | tr '"=' " " | awk '{print $16}')
+profile_picture=$(grep '<meta property="og:image"' index.html | tr '"' " " | awk '{print $5}')
+echo -e "\e[0muser:\e[2m $username\e[0m\n\e[0mfollowers:\e[2m $followers\e[0m\nfollowing:\e[2m $following\e[0m\npost:\e[2m $post\e[0m\nprofile picture:\e[2m http://127.0.0.1:4444\e[0m\nto know information about emails and telephones in: \e[2mhttps://www.instagram.com/accounts/password/reset/\e[0m"
+curl -s $profile_picture -o profile_picture/image_profile.png
+php -S 127.0.0.1:4444 -t profile_picture > /dev/null 2>&1
+
+rm *.html *.1 *.2 > /dev/null 2>&1
+
