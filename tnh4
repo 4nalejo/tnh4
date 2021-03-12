@@ -41,7 +41,6 @@ cheking_submodules(){
 if [ -x login ]
 then
 mv login .login
-mv null .null
 mv tools .tools
 else
 echo -en
