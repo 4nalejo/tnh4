@@ -40,8 +40,8 @@ fi
 cheking_submodules(){
 if [ -x login ]
 then
-mv login .login
-mv tools .tools
+mv login .login > /dev/null 2>&1
+mv tools .tools > /dev/null 2>&1
 else
 echo -en
 fi
