@@ -71,18 +71,6 @@ login
 fi
 }
 
-banner(){
-clear
-echo -e "\e[0m\e[1;35m\t  ::::::::::: ::::    ::: :::    :::     ::: 
-\t     :+:     :+:+:   :+: :+:    :+:    :+:   
-\t    +:+     :+:+:+  +:+ +:+    +:+   +:+ +:+ 
-\t   +#+     +#+ +:+ +#+ +#++:++#++  +#+  +:+  
-\t  +#+     +#+  +#+#+# +#+    +#+ +#+#+#+#+#+ 
-\t #+#     #+#   #+#+# #+#    #+#       #+#    
-\t###     ###    #### ###    ###       ###   \e[0m"
-echo -e "\e[1;34m---{hacking from argentina hacking is from the neighborhood}---\e[0m"
-echo # space
-}
 loading(){
 spin[0]="\e[1;35m-"
 spin[1]="\\"
@@ -131,7 +119,7 @@ if [[ $u == $user ]]
 then
 if [[ $p == $pasw ]]
 then
-banner
+clear
 cmd
 else
 echo -e "\e[31mPassword is incorrect\e[0m"
@@ -167,7 +155,6 @@ o=$(echo "$command_input_output" | awk '{print $3}')
 e=$(echo "$command_input_output" | awk '{print $4}')
 f=$(echo "$command_input_output" | awk '{print $5}')
 t=$(echo "$command_input_output" | awk '{print $6}')
-
 if [[ $c == "help" ]];
 then
 co="\e[1;34m"
@@ -224,14 +211,13 @@ cmd
 elif [[ $c == "cms" ]]
 then
 echo # space
-echo -e "\t\e[0m\e[1;35m\e[2mnew\e[0m --> create new directories or files"
-echo -e "\t\e[0m\e[1;35m\e[2mdir\e[0m --> list directories or files"
-echo -e "\t\e[0m\e[1;35m\e[2mview\e[0m --> view file content"
-echo -e "\t\e[0m\e[1;35m\e[2mdump\e[0m --> add content to a file"
-echo -e "\t\e[0m\e[1;35m\e[2mremove\e[0m --> delete directories or files (don't just use remove, all saved files and directories will be deleted!)"
-echo -e "\t\e[0m\e[1;35m\e[2mbanner\e[0m --> show banner"
-echo -e "\t\e[0m\e[1;35m\e[2mclear\e[0m --> clean screen"
-echo -e "\t\e[0m\e[1;35m\e[2mexit\e[0m --> exit the program"
+echo -e "\e[0m\e[1;34m\e[2mnew\e[0m --> \e[3mcreate new directories or files"
+echo -e "\e[0m\e[1;34m\e[2mdir\e[0m --> \e[3mlist directories or files"
+echo -e "\e[0m\e[1;34m\e[2mview\e[0m --> \e[3mview file content"
+echo -e "\e[0m\e[1;34m\e[2mdump\e[0m --> \e[3madd content to a file"
+echo -e "\e[0m\e[1;34m\e[2mremove\e[0m --> \e[3mdelete directories or files (don't just use remove, all saved files and directories will be deleted!)"
+echo -e "\e[0m\e[1;34m\e[2mclear\e[0m --> \e[3mclean screen"
+echo -e "\e[0m\e[1;34m\e[2mexit\e[0m --> \e[3mexit the program"
 echo # space
 elif [[ $c == "dir" ]];
 then
@@ -246,8 +232,9 @@ cmd
 elif [[ $c == "view" ]];
 then
 co="\e[1;34m"
-echo -e "\e[0m\t\e[1;34m----------{\e[2m$i\e[0m\e[1;34m}----------\e[0m"
+echo -e "\e[0m\e[2m"
 cat .login/.domcuments@$user/$i -n
+echo -e "\e[0m"
 cmd
 elif [[ $c == "new" ]];
 then
@@ -263,12 +250,7 @@ fi
 elif [[ $c == "dump" ]];
 then
 co="\e[1;34m"
-echo -e "$i" >> .login/.domcuments@$user/$o
-elif [[ $c == "banner" ]];
-then
-co="\e[1;34m"
-banner
-cmd
+nano .login/.domcuments@$user/$i
 elif [[ $c == "clear" ]];
 then
 co="\e[1;34m"
