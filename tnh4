@@ -1,6 +1,7 @@
 #!/bin/bash
 trap ctrl_c INT
 ctrl_c(){
+
 echo # space
 echo -en "\e[0m\e[35mdo you want to leave yes or no\e[2m "
 read yn
@@ -147,7 +148,7 @@ fi
 cmd(){
 while :;
 do
-echo -en "\e[0m\e[1;34m{${co}tnh4\e[0m\e[1;34m}\e[0m--\e[1;34m>\e[2m "
+echo -en "\e[0m\e[1;34m{${co}${co2}${user}\e[0m\e[1;34m}\e[0m--\e[1;34m>\e[2m "
 read command_input_output
 c=$(echo "$command_input_output" | awk '{print $1}')
 i=$(echo "$command_input_output" | awk '{print $2}')
@@ -251,6 +252,9 @@ elif [[ $c == "dump" ]];
 then
 co="\e[1;34m"
 nano .login/.domcuments@$user/$i
+elif [[ $c == "colorType" ]];
+then
+co2=$(echo -e "\e[$i" > .config; cat .config)
 elif [[ $c == "clear" ]];
 then
 co="\e[1;34m"
