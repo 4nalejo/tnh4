@@ -1,5 +1,5 @@
 #!/bin/bash
-msg(){
+function msg(){
 echo # space
 echo -e "\e[0m\e[1;34mForrat is used by my device find\e[0m"
 echo -e "\e[0m\e[2mI don't know if it's a hacking method"
@@ -7,19 +7,20 @@ echo -e "but I could understand that if we use social engineering we could forma
 echo -e "as he says, magic is very simple"
 echo -e "we just have to be the victim give our data and uala, from victim to hacker\e[0m"
 echo # space
-echo -en "\e[1;34menter to take us to the page \e[0m"
-read
 }
 
-echo -en "\e[1;34mwhat device is it on (pc / android):\e[2m "
-read o
+function banner(){
+echo " _____ _           _
+|  ___(_)_ __   __| |
+| |_  | |  _ \ / _  |
+|  _| | | | | | (_| |
+|_|   |_|_| |_|\__,_|"
+}
+function server(){
+echo -e "\e[1;34m>\e[0m http://localhost:2222"
+php -S localhost:2222 | grep "Server" | awk "{print $3}"  
+}
 
-if [[ $o == "android" ]]
-then
+banner
 msg
-termux-open https://www.google.com/android/find
-elif [[ $o == "pc" ]]
-then
-msg
-python -m webbrowser -n "https://www.google.com/android/find"
-fi
+server
